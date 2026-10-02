@@ -1,4 +1,4 @@
-import { isAllowedPrivateIp, rateLimit, staticRouteRateLimit } from '../main/middleware/security';
+import { corsOptions, isAllowedPrivateIp, rateLimit, staticRouteRateLimit } from '../main/middleware/security';
 import express from 'express';
 import request from 'supertest';
 
@@ -41,6 +41,26 @@ async function run() {
 
   // 6. Rate Limiter Bypass Tests
   console.log('Testing Rate Limiter Bypass...');
+
+  // Render same-origin deployments declare their public service URL rather
+  // than weakening the authenticated API CORS policy for every origin.
+  const originalAllowedOrigins = process.env.FLO_ALLOWED_ORIGINS;
+  process.env.FLO_ALLOWED_ORIGINS = 'https://pos-ioy4.onrender.com';
+  await new Promise<void>((resolve, reject) => {
+    corsOptions.origin('https://pos-ioy4.onrender.com', (error, allowed) => {
+      if (error) return reject(error);
+      assert(allowed === true, 'Configured Render service origin should be allowed by CORS');
+      resolve();
+    });
+  });
+  await new Promise<void>((resolve) => {
+    corsOptions.origin('https://untrusted.example', (error) => {
+      assert(error?.message === 'Not allowed by CORS', 'Unconfigured public origin should remain rejected');
+      resolve();
+    });
+  });
+  if (originalAllowedOrigins === undefined) delete process.env.FLO_ALLOWED_ORIGINS;
+  else process.env.FLO_ALLOWED_ORIGINS = originalAllowedOrigins;
   
   const createRateLimitedApp = (maxRequests: number, ipOverride?: string, extraOptions?: Record<string, any>) => {
     const app = express();

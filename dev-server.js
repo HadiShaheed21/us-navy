@@ -26,6 +26,17 @@ if (fs.existsSync(envPath)) {
 
 const path = require('path');
 const os = require('os');
+const isProduction = process.env.NODE_ENV === 'production';
+const hasPersistentDatabasePath = Boolean(
+  process.env.FLO_DEV_USER_DATA?.trim()
+  || process.env.FLO_DB_PATH?.trim()
+  || process.env.RAILWAY_VOLUME_MOUNT_PATH?.trim(),
+);
+
+if (isProduction && !hasPersistentDatabasePath) {
+  console.error('[DevServer] Refusing to start production without persistent database storage. Set FLO_DEV_USER_DATA=/data (Render) or FLO_DB_PATH to a persistent-volume path.');
+  process.exit(1);
+}
 const devUserDataPath = process.env.FLO_DEV_USER_DATA || __dirname;
 
 // ── Mock Electron's `app` module ──────────────────────────────────────────────

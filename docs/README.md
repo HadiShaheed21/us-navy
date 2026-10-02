@@ -25,6 +25,7 @@ This index classifies documentation in `docs/` so contributors and AI agents kno
 | [printer-hardware-testing-protocol.md](printer-hardware-testing-protocol.md) | Physical hardware validation matrix, testing protocols across platforms, and test report template. | CURRENT |
 | [printing-architecture.md](printing-architecture.md) | Multilingual print pipeline architecture (epic #438): shared print kernel, PrintDocument v1 model, renderer/transport map, language policy and canonical label flow, template trust models, capability/warning semantics, testing guide, and contributor recipes. | CURRENT |
 | [google-drive-setup.md](google-drive-setup.md) | Maintainer setup for the optional Google Drive backup OAuth client. | CURRENT |
+| [render.md](render.md) | Render Web Service deployment with a persistent SQLite disk and client isolation. | CURRENT |
 | [mac-app-store-publishing.md](mac-app-store-publishing.md) | Fastlane, Transporter, and GitHub Actions publishing workflow for the Mac App Store build. | CURRENT |
 | [release-process.md](release-process.md) | Desktop release channels, draft verification gates, artifact naming, and explicit stable promotion. | CURRENT |
 | [upgrade-support-matrix.md](upgrade-support-matrix.md) | Evidence matrix for real installed-artifact N → N+1 upgrade coverage and explicit NOT-RUN platform cells. | CURRENT |
